@@ -150,8 +150,6 @@ def settingWindow():
     #タブを閉じるときに、データが保存されているかの確認
     setting_win.protocol("WM_DELETE_WINDOW", lambda:click_close(entry1, entry2, entry3, setting_win))
 
-
-
 #このスクリプトがメインなら実行
 if __name__ == "__main__":
 
@@ -210,7 +208,6 @@ if __name__ == "__main__":
 
     # 設定ボタン設置
     setting_button = tk.Button(root, text = "設定", height = 5, width = 20, command = settingWindow)#ボタンの定義
-    # setting_button.place(relx = 0.755, rely = 0.43, relwidth=0.15, relheight=0.064)#ボタンの配置
     setting_button.place(relx = 0.805, rely = 0.05, relwidth=0.15, relheight=0.1)#ボタンの配置
     objects.append(setting_button)#ボタンをリストに格納(フォントサイズ調整のため)
     textSizes.append(1.5)#resize_font関数で使う、フォントサイズを決める値

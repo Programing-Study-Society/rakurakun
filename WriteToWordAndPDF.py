@@ -47,8 +47,6 @@ def DocumentSaveAndPDFCreation(doc, savePath, log):#Wordファイルを保存し
 #ワードファイルを作成する関数
 def wordWrite(text_titles, text_list, imageNames, imagePath, savePaths, mode, log):
 
-    i = 0#画像ファイルリストのインデックス用
-
     #阪口先生モードのWord作成
     if mode == "0":
         doc = DocumentCreation()
@@ -85,8 +83,15 @@ def wordWrite(text_titles, text_list, imageNames, imagePath, savePaths, mode, lo
         #画像ファイルが1枚以上あれば画像挿入モードに移行する
         if(len(imageNames) > 0):
 
+            #挿入する画像があるか検索する
+            putFlag = False
+            for img in imageNames:
+                if((img.startswith(text_title)) and not(img[len(text_title)].isdigit())):
+                    putFlag = True
+                    break
+
             #今のソースコードに対応した画像ファイルがあれば続ける
-            if imageNames[i].startswith(text_title):
+            if putFlag:
                 #実行結果という文を追加
                 paragraph = doc.add_paragraph("課題" + text_title + "実行結果")
 
@@ -99,10 +104,9 @@ def wordWrite(text_titles, text_list, imageNames, imagePath, savePaths, mode, lo
                 font.size = Pt(20)  # ポイント単位で指定
 
                 #画像を追加
-                for _ in range(i, len(imageNames)):
-                    if not imageNames[i].startswith(text_title) : break#画像ファイルの先頭の文字列がプログラムファイル名と異なったらbreak
-                    doc.add_picture(imagePath + imageNames[i],width = Pt(300))#画像をWordに追加
-                    i+=1#インデックスをずらす
+                for img in imageNames:
+                    if((img.startswith(text_title)) and not(img[len(text_title)].isdigit())) :# 挿入対象の画像なら
+                        doc.add_picture(imagePath + img,width = Pt(300))#画像をWordに追
 
             #今のソースコードに対応した画像ファイルがなければ、そのことを知らせる
             else:

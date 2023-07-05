@@ -4,8 +4,12 @@ import tkinter as tk #確認ダイアログを出す用
 import WriteToWordAndPDF #ファイル分け
 import TextExtraction #ファイル分け
 import WriteToLog #ファイル分け
+import MakeList #ファイル分け
 
 #ログが変わっていることをわかりやすくするための工夫
+#MakeListのタブを終了させたときの処理
+
+#P02-AB_XX.cppのXXが2桁だと引っかからなくなった
 
 #プログラムコードに関しては名前指定無しでも良いのではないか（ファイル分け対策）
 #プログラミングの授業範囲を見て、先に対処
@@ -95,6 +99,55 @@ def start(word,teacherMode,log):
                         pass
             else:
                 pass
+        
+        if(ProCnt == 0 and ImCnt == 0):
+            WriteToLog.writeToLog(log,"対象ファイルが1つも見つかりませんでした",'Red')
+            return -7
+        elif(ProCnt == 0):
+            WriteToLog.writeToLog(log,"プログラムファイルが見つかりませんでした",'Red')
+            return -8
+        
+        #対象ファイルを選択するチェックボックスウィンドウを表示する
+        decisions = MakeList.makeList(codeNames)#decisionsは(挿入,非挿入),(True,False)の配列
+
+        print(decisions)
+
+        #選択されずに回ってきたら処理をここで終了する
+        if(decisions == -1): 
+            WriteToLog.writeToLog(log,"プログラムファイルが選択されませんでした",'Red')
+            return-13
+
+        #選択されたプログラムを仮代入する配列
+        programPaths2 = []
+        codeNames2 = []
+
+        #選択されたプログラムだけを取り出す
+        ProCnt = 0
+        for i in range(len(decisions)):
+            if(decisions[i]):
+                programPaths2.append(programPaths[i])
+                codeNames2.append(codeNames[i])
+                ProCnt += 1
+        programPaths = programPaths2
+        codeNames = codeNames2
+
+        print("選択されたプログラム : ")
+        print(codeNames)
+
+        #選択された画像を仮代入するリスト
+        imageNames2 = list()
+        #選択されたプログラムの画像だけを取り出す
+        ImCnt = 0
+        for code in codeNames:
+            for image in imageNames:
+                if((image.startswith(code)) and not(image[len(code)].isdigit())):
+                    imageNames2.append(image)
+                    imageNames.remove(image)
+                    ImCnt += 1
+        
+        imageNames = imageNames2
+        print("image : ")
+        print(imageNames2)
         
         if(ProCnt == 0 and ImCnt == 0):
             WriteToLog.writeToLog(log,"対象ファイルが1つも見つかりませんでした",'Red')
